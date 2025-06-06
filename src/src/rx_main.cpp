@@ -1541,9 +1541,8 @@ void setup()
 
     pinMode( 10, OUTPUT );
     pinMode( 3, OUTPUT );
+    pinMode( 1, OUTPUT );
 }
-
-extern void startWaveform8266(uint8_t pin, uint32_t timeHighUS, uint32_t timeLowUS);
 
 void loop()
 {
@@ -1621,15 +1620,7 @@ void loop()
     checkGeminiMode();
     debugRcvrLinkstats();
 
-    YDIFlyServoControl( now );
-    static unsigned long last = now;
-    if( now - last >= 100 )
-    {
-        Serial.printf("\r\n%d,%d,%d,%d\r\n", CRSF::ChannelData[0],CRSF::ChannelData[1],CRSF::ChannelData[2],CRSF::ChannelData[3]);
-        startWaveform8266(10, CRSF::ChannelData[0], 20000);
-        startWaveform8266(3, CRSF::ChannelData[2], 20000);
-        last = last+100;
-    }
+    YDIFlyControl( now );
 }
 
 struct bootloader {

@@ -1541,7 +1541,6 @@ void setup()
 
     pinMode( 10, OUTPUT );
     pinMode( 3, OUTPUT );
-    pinMode( 1, OUTPUT );
 }
 
 void loop()
@@ -1620,7 +1619,7 @@ void loop()
     checkGeminiMode();
     debugRcvrLinkstats();
 
-    YDIFlyControl( now );
+    YDIFlyControl(now);
 }
 
 struct bootloader {

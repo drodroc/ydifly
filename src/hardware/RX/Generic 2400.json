@@ -15,5 +15,8 @@
     "power_control": 0,
     "power_values": [13],
     "led": 16,
-    "button": 0
+    "button": 0,
+    "vbat": 17,
+    "vbat_offset": 12,
+    "vbat_scale": 950
 }

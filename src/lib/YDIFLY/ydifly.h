@@ -6,7 +6,7 @@
 
 /******************** 基本参数 ******************* */
 #define YDIFLY_SERVO_L_PIN                  10      // 引脚设置
-#define YDIFLY_SERVO_R_PIN                  3       // 引脚设置
+#define YDIFLY_SERVO_R_PIN                  1       // 引脚设置
 #define YDIFLY_SERVO_B_PIN                  1       // 引脚设置
 
 #define YDIFLY_REMOTE_LX                    3       // 左X轴摇杆

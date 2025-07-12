@@ -7,7 +7,6 @@
 /******************** 基本参数 ******************* */
 #define YDIFLY_SERVO_L_PIN                  10      // 引脚设置
 #define YDIFLY_SERVO_R_PIN                  1       // 引脚设置
-#define YDIFLY_SERVO_B_PIN                  1       // 引脚设置
 
 #define YDIFLY_REMOTE_LX                    3       // 左X轴摇杆
 #define YDIFLY_REMOTE_LY                    2       // 左Y轴摇杆
@@ -31,7 +30,6 @@
 /******************** 舵机方向设置 ******************* */
 #define YDIFLY_SERVO_L_DIR                  0       // 左舵机摆动方向，0表示正向，1表示反向
 #define YDIFLY_SERVO_R_DIR                  1       // 右舵机摆动方向，0表示正向，1表示反向
-#define YDIFLY_SERVO_B_DIR                  0       // 备用舵机摆动方向，0表示正向，1表示反向
 
 /******************** 遥控系数设置 ******************* */
 #define YDIFLY_FACTOR_FREQ                  0.05f
@@ -42,19 +40,18 @@
 #define YDIFLY_FACTOR_FILTER                0.2f
 
 /******************** 正弦周期设置 ******************* */
-#define YDIFLY_CYCLE_MIN                    500
-#define YDIFLY_CYCLE_MAX                    3000
+#define YDIFLY_CYCLE_MIN                    100
+#define YDIFLY_CYCLE_MAX                    2000
 
 /******************** 任务控制周期参数 ******************* */
 #define YDIFLY_CONTROL_CYCLE                50     // 舵机的控制周期，ms
-#define YDIFLY_DEBUG_CYCLE                  100      // debug的控制周期，ms
+#define YDIFLY_DEBUG_CYCLE                  100    // debug的控制周期，ms
 
 
 typedef enum
 {
     SERVO_L,    // 左翅膀舵机
     SERVO_R,    // 右翅膀舵机
-    SERVO_B,    // 备用舵机
 }ydifly_servo_name_e;
 
 

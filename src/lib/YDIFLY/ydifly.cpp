@@ -95,7 +95,7 @@ void YDIFlyControl( unsigned long now_time_ms )
             
             // Serial.printf("\r\n%f,%f,%f,%f,%f\r\n", angle_l_max, angle_l_min, angle_r_max, angle_r_min, control_T);
             // Serial.printf("\r\n%d,%d,%d,%d\r\n", ydifly.remote.raw[YDIFLY_REMOTE_SWA], ydifly.remote.raw[YDIFLY_REMOTE_SWB], ydifly.remote.raw[YDIFLY_REMOTE_SWC], ydifly.remote.raw[YDIFLY_REMOTE_SWD]);
-            Serial.printf("\r\n%d,%d,%d,%d\r\n", ydifly.remote.swa, ydifly.remote.swb, ydifly.remote.swc, ydifly.remote.swd);
+            // Serial.printf("\r\n%d,%d,%d,%d\r\n", ydifly.remote.swa, ydifly.remote.swb, ydifly.remote.swc, ydifly.remote.swd);
         }
     }
 
@@ -168,15 +168,6 @@ static void YDIFlyServoAngleControl( ydifly_servo_name_e servo_name, float angle
         #else
         startWaveform8266(YDIFLY_SERVO_R_PIN, time_hight_us, 20000-time_hight_us);
         #endif
-        break;
-    case SERVO_B:
-        #if YDIFLY_SERVO_B_DIR
-        startWaveform8266(YDIFLY_SERVO_B_PIN, time_hight_us_r, 20000-time_hight_us_r);
-        #else
-        startWaveform8266(YDIFLY_SERVO_B_PIN, time_hight_us, 20000-time_hight_us);
-        #endif
-        break;
-    default:
         break;
     }
 }

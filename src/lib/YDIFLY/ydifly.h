@@ -31,17 +31,26 @@
 #define YDIFLY_SERVO_L_DIR                  0       // 左舵机摆动方向，0表示正向，1表示反向
 #define YDIFLY_SERVO_R_DIR                  1       // 右舵机摆动方向，0表示正向，1表示反向
 
-/******************** 遥控系数设置 ******************* */
+/******************** 遥控控制系数设置 ******************* */
 #define YDIFLY_FACTOR_FREQ                  0.05f
-#define YDIFLY_FACTOR_YAW                   0.05f
+#define YDIFLY_FACTOR_YAW                   0.02f
 #define YDIFLY_FACTOR_PITCH                 0.05f
 #define YDIFLY_FACTOR_AMP                   0.05f
+#define YDIFLY_FACTOR_OFFSET                0.05f
 
 #define YDIFLY_FACTOR_FILTER                0.2f
 
-/******************** 正弦周期设置 ******************* */
+/******************** 翅膀扑翼周期设置 ******************* */
 #define YDIFLY_CYCLE_MIN                    100
 #define YDIFLY_CYCLE_MAX                    2000
+
+/******************** 翅膀扑翼幅度设置 ******************* */
+#define YDIFLY_AMP0                         60      // 扑翼幅度为 ±60°
+#define YDIFLY_AMP1                         70      // 扑翼幅度为 ±70°
+#define YDIFLY_AMP2                         80      // 扑翼幅度为 ±80°
+
+/******************** 翅膀上拍下拍速度差 ******************* */
+#define YDIFLY_SPEED_DIFF                   0       // 速度差需要在 -YDIFLY_CONTROL_CYCLE~YDIFLY_CONTROL_CYCLE 之间
 
 /******************** 任务控制周期参数 ******************* */
 #define YDIFLY_CONTROL_CYCLE                50     // 舵机的控制周期，ms
@@ -60,9 +69,10 @@ typedef struct
     uint32_t *raw;                  // 遥控原始数据
     float amp;                      // 扑翼幅值
     float freq;                     // 扑翼频率
+    float offset;                   // 舵机中间值偏移
     float yaw;                      // 偏航角度控制
     float pitch;                    // 俯仰角度控制
-    uint8_t swa;                    // SWA 信号，0和1
+    uint8_t swa;                    // SWA 信号，0和2
     uint8_t swb;                    // SWB 信号，0、1、2
     uint8_t swc;                    // SWC 信号，0、1、2
     uint8_t swd;                    // SWD 信号，0、1、2
@@ -80,9 +90,8 @@ typedef struct
 
 void YDIFlyControl( unsigned long now_time_ms );
 
-static void YDIFlyServoSinControl( float l_angle_max, float l_angle_min, float r_angle_max, float r_angle_min, float T );
+static void YDIFlyServoSinControl( float l_angle_max, float l_angle_min, float r_angle_max, float r_angle_min, float T, float speed_diff );
 static void YDIFlyRemoteDecode( ydifly_remote_cmd_t* remote );
-static void YDIFlyFlyingControl( unsigned long now_time_ms );
 static void YDIFlyInit( void );
 static void YDIFlyServoAngleControl( ydifly_servo_name_e servo_name, float angle_set );
 

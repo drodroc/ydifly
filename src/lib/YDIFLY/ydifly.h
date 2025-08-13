@@ -21,7 +21,7 @@
 
 /******************** 舵机参数设置 ******************* */
 #define YDIFLY_SERVO_ANGLE_L_INIT           90
-#define YDIFLY_SERVO_ANGLE_R_INIT           90
+#define YDIFLY_SERVO_ANGLE_R_INIT           100
 #define YDIFLY_SERVO_ANGLE_L_MAX            180
 #define YDIFLY_SERVO_ANGLE_L_MIN            0
 #define YDIFLY_SERVO_ANGLE_R_MAX            180
@@ -34,23 +34,23 @@
 /******************** 遥控控制系数设置 ******************* */
 #define YDIFLY_FACTOR_FREQ                  0.05f
 #define YDIFLY_FACTOR_YAW                   0.02f
-#define YDIFLY_FACTOR_PITCH                 0.05f
+#define YDIFLY_FACTOR_PITCH                 0.025f  //俯仰系数
 #define YDIFLY_FACTOR_AMP                   0.05f
 #define YDIFLY_FACTOR_OFFSET                0.05f
 
 #define YDIFLY_FACTOR_FILTER                0.2f
 
 /******************** 翅膀扑翼周期设置 ******************* */
-#define YDIFLY_CYCLE_MIN                    100
-#define YDIFLY_CYCLE_MAX                    2000
+#define YDIFLY_CYCLE_MIN                    250
+#define YDIFLY_CYCLE_MAX                    600
 
 /******************** 翅膀扑翼幅度设置 ******************* */
-#define YDIFLY_AMP0                         60      // 扑翼幅度为 ±60°
-#define YDIFLY_AMP1                         70      // 扑翼幅度为 ±70°
-#define YDIFLY_AMP2                         80      // 扑翼幅度为 ±80°
+#define YDIFLY_AMP0                         50      // 扑翼幅度为 ±60°
+#define YDIFLY_AMP1                         60      // 扑翼幅度为 ±70°
+#define YDIFLY_AMP2                         70      // 扑翼幅度为 ±80°
 
 /******************** 翅膀上拍下拍速度差 ******************* */
-#define YDIFLY_SPEED_DIFF                   0       // 速度差需要在 -YDIFLY_CONTROL_CYCLE~YDIFLY_CONTROL_CYCLE 之间
+#define YDIFLY_SPEED_DIFF                   10       // 速度差需要在 -YDIFLY_CONTROL_CYCLE~YDIFLY_CONTROL_CYCLE 之间
 
 /******************** 任务控制周期参数 ******************* */
 #define YDIFLY_CONTROL_CYCLE                50     // 舵机的控制周期，ms

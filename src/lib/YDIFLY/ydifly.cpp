@@ -61,12 +61,12 @@ void YDIFlyControl( unsigned long now_time_ms )
                 ydifly.remote_last.offset= ydifly.remote.offset;
 
                 /* 舵机范围控制 */
-                angle_l_max = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
-                angle_l_min = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
-                angle_r_max = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
-                angle_r_min = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
+                angle_l_max = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
+                angle_l_min = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
+                angle_r_max = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
+                angle_r_min = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
 
-                /* 限幅 */
+                /* 限幅 *
                 if( angle_l_max > YDIFLY_SERVO_ANGLE_L_MAX )                angle_l_max = YDIFLY_SERVO_ANGLE_L_MAX;
                 if( angle_l_min < YDIFLY_SERVO_ANGLE_L_MIN )                angle_l_min = YDIFLY_SERVO_ANGLE_L_MIN;
                 if( angle_r_max > YDIFLY_SERVO_ANGLE_R_MAX )                angle_r_max = YDIFLY_SERVO_ANGLE_R_MAX;

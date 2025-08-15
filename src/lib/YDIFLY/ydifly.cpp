@@ -91,8 +91,8 @@ void YDIFlyControl( unsigned long now_time_ms )
             }
             else    // 默认情况下，舵机处于初始位置
             {
-                YDIFlyServoAngleControl( SERVO_L, YDIFLY_SERVO_ANGLE_L_INIT );
-                YDIFlyServoAngleControl( SERVO_R, YDIFLY_SERVO_ANGLE_R_INIT );
+                YDIFlyServoAngleControl( SERVO_L, YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET );
+                YDIFlyServoAngleControl( SERVO_R, YDIFLY_SERVO_ANGLE_R_INIT + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET );
             }
         }
 

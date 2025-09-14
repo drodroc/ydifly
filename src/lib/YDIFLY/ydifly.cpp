@@ -1,7 +1,9 @@
 #include "ydifly.h"
 #include "CRSF.h"
+#include "common.h"
 
 ydifly_control_t ydifly;
+extern connectionState_e connectionState;
 
 static void YDIFlyInit( void )
 {
@@ -27,8 +29,12 @@ void YDIFlyControl( unsigned long now_time_ms )
 
     if( ydifly.init_flag == 0 )     // 如果还没有初始化
     {
-        ydifly.init_flag = 1;       // 设置flag
+        ydifly.init_flag = 1;       // 设置flag，表示完成初始化
         YDIFlyInit();
+    }
+    else if( ydifly.init_flag == 1 )// 已完成初始化，判断遥控是否连接
+    {
+        if( connectionState == connected )      ydifly.init_flag = 2;   // 遥控已连接
     }
     else    // 已经完成初始化，启动任务
     {
@@ -61,12 +67,12 @@ void YDIFlyControl( unsigned long now_time_ms )
                 ydifly.remote_last.offset= ydifly.remote.offset;
 
                 /* 舵机范围控制 */
-                angle_l_max = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
-                angle_l_min = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
-                angle_r_max = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
-                angle_r_min = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW + ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
+                angle_l_max = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW - ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
+                angle_l_min = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW - ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
+                angle_r_max = YDIFLY_SERVO_ANGLE_L_INIT + ydifly.remote.yaw*YDIFLY_FACTOR_YAW - ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET + ydifly.remote.amp;
+                angle_r_min = YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.yaw*YDIFLY_FACTOR_YAW - ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET - ydifly.remote.amp;
 
-                /* 限幅 *
+                /* 限幅 */
                 if( angle_l_max > YDIFLY_SERVO_ANGLE_L_MAX )                angle_l_max = YDIFLY_SERVO_ANGLE_L_MAX;
                 if( angle_l_min < YDIFLY_SERVO_ANGLE_L_MIN )                angle_l_min = YDIFLY_SERVO_ANGLE_L_MIN;
                 if( angle_r_max > YDIFLY_SERVO_ANGLE_R_MAX )                angle_r_max = YDIFLY_SERVO_ANGLE_R_MAX;
@@ -79,20 +85,22 @@ void YDIFlyControl( unsigned long now_time_ms )
                 YDIFlyServoSinControl( angle_l_max, angle_l_min, angle_r_max, angle_r_min, control_T, YDIFLY_SPEED_DIFF );
                 // YDIFlyServoSinControl( 120, 60, 120, 60, 1000, YDIFLY_SPEED_DIFF );
             }
-            else if( ydifly.remote.swc == 2 )     // 如果拨动开关，翅膀下摆
+            else if( ydifly.remote.swc == 2 )     // 如果拨动开关，翅膀摆动。拨杆到上档位
             {
                 YDIFlyServoAngleControl( SERVO_L, YDIFLY_SERVO_ANGLE_L_MIN );
                 YDIFlyServoAngleControl( SERVO_R, YDIFLY_SERVO_ANGLE_R_MIN );
+
             }
-            else if( ydifly.remote.swc == 1 )     // 如果拨动开关，翅膀上摆
+            else if( ydifly.remote.swc == 1 )     // 舵机处于初始位置。拨杆到中档位
+            {
+                YDIFlyServoAngleControl( SERVO_L, YDIFLY_SERVO_ANGLE_L_INIT - ydifly.remote.pitch*YDIFLY_FACTOR_PITCH - ydifly.remote.offset*YDIFLY_FACTOR_OFFSET );
+                YDIFlyServoAngleControl( SERVO_R, YDIFLY_SERVO_ANGLE_R_INIT - ydifly.remote.pitch*YDIFLY_FACTOR_PITCH + ydifly.remote.offset*YDIFLY_FACTOR_OFFSET );
+
+            }
+            else    // 如果拨动开关，翅膀摆动。拨杆到下档位
             {
                 YDIFlyServoAngleControl( SERVO_L, YDIFLY_SERVO_ANGLE_L_MAX );
                 YDIFlyServoAngleControl( SERVO_R, YDIFLY_SERVO_ANGLE_R_MAX );
-            }
-            else    // 默认情况下，舵机处于初始位置
-            {
-                YDIFlyServoAngleControl( SERVO_L, YDIFLY_SERVO_ANGLE_L_INIT );
-                YDIFlyServoAngleControl( SERVO_R, YDIFLY_SERVO_ANGLE_R_INIT );
             }
         }
 
@@ -116,9 +124,9 @@ static void YDIFlyRemoteDecode( ydifly_remote_cmd_t* remote )
     remote->freq = constrain( ydifly.remote.raw[YDIFLY_REMOTE_LY], 300, 1800 ) - 300;
 
     /* 将遥控的数据映射在 -700~800 之间 */
-    remote->yaw   = (float)ydifly.remote.raw[YDIFLY_REMOTE_RX] - YDIFLY_REMOTE_JOY_MID;
+    remote->yaw   = (float)ydifly.remote.raw[YDIFLY_REMOTE_LX] - YDIFLY_REMOTE_JOY_MID;
     remote->pitch = (float)ydifly.remote.raw[YDIFLY_REMOTE_RY] - YDIFLY_REMOTE_JOY_MID;
-    remote->offset= (float)ydifly.remote.raw[YDIFLY_REMOTE_LX] - YDIFLY_REMOTE_JOY_MID;
+    remote->offset= (float)ydifly.remote.raw[YDIFLY_REMOTE_RX] - YDIFLY_REMOTE_JOY_MID;
 
     /* 解算 SWA\SWB\SWC\SWD 信号 */
     if( ydifly.remote.raw[YDIFLY_REMOTE_SWA] < 300 )            remote->swa = 0;
@@ -155,7 +163,7 @@ static void YDIFlyServoSinControl( float l_angle_max, float l_angle_min, float r
 
     if( time_now > T )
     {
-        time_now = 0;
+        time_now -= T;
     }    
 }
 

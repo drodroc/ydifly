@@ -1,3 +1,16 @@
+/**
+ * @file     : ydifly.cpp
+ * @brief    : （一体板开源代码）
+ *             YDIFLY蝴蝶扑翼机开源代码，其中功能包括实现蝴蝶的基本遥控飞行，翅膀竖立功能等等，且可通过修改宏定义轻松修改代码参数，无须看懂代码。
+ *             一体板具有体积小质量轻，只有一个接收机重量的优势，集所有功能于一身，将主控板重量做到极致。
+ * @author   : 一点创绘
+ * @date     : 2025-9-14
+ * @version  : v1.3
+ * 
+ * @license  : GPL 3.0 License
+ * @changelog:
+ * - v1.3 (2025-9-14): 初步正式发布开源代码，具有控制蝴蝶飞行，电池电量反馈，连接ELRS遥控等基础功能。
+ */
 #include "ydifly.h"
 #include "CRSF.h"
 #include "common.h"
@@ -16,8 +29,8 @@ static void YDIFlyInit( void )
 void YDIFlyControl( unsigned long now_time_ms )
 {
     static unsigned long last_time_ms_control = now_time_ms;    // 上一次时间
-    static unsigned long last_time_ms_debug = now_time_ms;    // 上一次时间
-    static unsigned long last_time_ms = now_time_ms;    // 上一次时间
+    static unsigned long last_time_ms_debug = now_time_ms;      // 上一次时间
+    static unsigned long last_time_ms = now_time_ms;            // 上一次时间
     float angle_l_max, angle_l_min, angle_r_max, angle_r_min, control_T;
     /*输入保护*/
     if( last_time_ms > now_time_ms )    // 判断是否时间溢出，即超出49.7天
